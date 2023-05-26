@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% block login %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Graduation_Placement_Service</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/font-awesome/css/font-awesome.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/Ionicons/css/ionicons.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/AdminLTE.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/skins/skin-blue.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='view_offer.css') }}">
+  <!--[if lt IE 9]>
+  <script src="{{ url_for('static', filename='local/js/html5shiv.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='local/js/respond.min.js')}}"></script>
+  <![endif]-->
+  <!-- Google Font -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='local/css/google_fonts.css')}}">
+
+<script>
+  function searchSuggestions(keyword) {
+  // 发送AJAX请求到后端
+  $.ajax({
+    url: '/university/search',
+    type: 'GET',
+    data: { keyword: keyword },
+    success: function (response) {
+      // 处理后端返回的结果
+      var suggestions = response.suggestions;
+      var universitysuggestionsList = $('#universitysuggestionsList');
+      universitysuggestionsList.empty();
+
+      // 生成联想搜索下拉条
+      for (var i = 0; i < suggestions.length; i++) {
+        var suggestion = suggestions[i];
+        var listItem = $('<li>' + suggestion + '</li>');
+        universitysuggestionsList.append(listItem);
+      }
+
+      // 显示或隐藏联想搜索下拉条
+      if (keyword.trim() !== '') {
+        universitysuggestionsList.show();
+      } else {
+        universitysuggestionsList.hide();
+      }
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
+  var universitysuggestionsList = document.getElementById('universitysuggestionsList');
+    universitysuggestionsList.addEventListener('click', function(event) {
+      var selectedSuggestion = event.target.innerText;
+      document.getElementById('searchInput').value = selectedSuggestion;
+      universitysuggestionsList.style.display = 'none';
+    });
+}
+
+
+</script>
+<script>
+ function searchSuggestions2(keyword1,keyword2) {
+  // 发送AJAX请求到后端
+  $.ajax({
+    url: '/program/search',
+    type: 'GET',
+    data: { keyword1: keyword1, keyword2: keyword2 },
+    success: function (response) {
+      // 处理后端返回的结果
+      var suggestions = response.suggestions;
+      var programsuggestionsList = $('#programsuggestionsList');
+      programsuggestionsList.empty();
+
+      // 生成联想搜索下拉条
+      for (var i = 0; i < suggestions.length; i++) {
+        var suggestion = suggestions[i];
+        var listItem = $('<li>' + suggestion + '</li>');
+        programsuggestionsList.append(listItem);
+      }
+
+      // 显示或隐藏联想搜索下拉条
+      if (keyword1.trim() !== '') {
+        programsuggestionsList.show();
+      } else {
+        programsuggestionsList.hide();
+      }
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
+  var programsuggestionsList = document.getElementById('programsuggestionsList');
+    programsuggestionsList.addEventListener('click', function(event) {
+      var selectedSuggestion = event.target.innerText;
+      document.getElementById('searchInput2').value = selectedSuggestion;
+      programsuggestionsList.style.display = 'none';
+    });
+}
+</script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <!-- Main Header 主体页头 -->
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a class="logo">
+      <!-- 侧栏迷你徽标 mini 50x50 pixels -->
+      <span class="logo-mini"><b>GPS</b></span>
+      <!-- 常规状态标志和移动设备标志 -->
+      <span><b>GPS System</b></span>
+    </a>
+
+    <!-- Header Navbar 首部导航栏 -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button 侧边栏切换按钮 -->
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <span class="sr-only">Switch Navigator</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- 左侧柱。包含徽标和边栏 -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">Navigator</li>
+        <!-- 导航列表，你可以自行更改图标 -->
+        <li><a href="/uicer"><i class="fa fa-home"></i> <span>Mainpage</span></a></li>
+
+        <li  class="active"><a href="/kp/view"><i class="fa fa-sitemap"></i> <span>View Knowledge Point</span></a></li>
+        <li class="treeview">
+          <a><i class="fa fa-users"></i> <span>Search Program</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href='/program/searchByGPA'> <i class="fa fa-circle-o"></i>Search By GPA</a></li>
+            <li><a href='/university/searchByUniversity'> <i class="fa fa-circle-o"></i>Search By University</a></li>
+          </ul>
+        </li>
+        <li><a href="/offer/view"><i class="fa fa-user"></i> <span>View Offer Time</span></a></li>
+        <li><a href="/uicer/change_password"><i class="fa fa-key"></i> <span>Change Password</span></a></li>
+        <li><a href="/uicer/beAlumni"><i class="fa fa-id-card-o"></i> <span>Update Account</span></a></li>
+        <li class="treeview">
+          <a><i class="fa fa-gear"></i> <span>Add New</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/offer/add"> <i class="fa fa-circle-o"></i>Add Offer</a></li>
+            {% if alumni%}
+            <li><a href='/kp/add'> <i class="fa fa-circle-o"></i>Add Knowledge Point</a></li>
+            {% endif %}
+            <li><a href='/university/add'> <i class="fa fa-circle-o"></i>Add University</a></li>
+            <li><a href='/program/add'> <i class="fa fa-circle-o"></i>Add Program</a></li>
+          </ul>
+        </li>
+        <li><a href="/gpt/advice"><i class="fa fa-sitemap"></i> <span>Program guidance</span></a></li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Search Results
+        <small></small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+        <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">View Knowledge Points</h3>
+            </div>
+            {% if kps %}
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>University</th>
+                  <th>Program</th>
+                  <th>Knowledge</th>
+                  <th>Alumni</th>
+                  <th>Grade</th>
+                  <th>gender</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for kp in kps %}
+                <tr>
+                  <td>{{kp.program.university.universityName}}</td>
+                  <td>{{kp.program.programName}}</td>
+                  <td>{{kp.courseNameList}}</td>
+
+                  {% if kp.alumni.anonymousName%}
+                    <td></td>
+                  {% else %}
+                    <td>{{kp.alumni.name}}</td>
+                    {%endif%}
+                  <td>{{kp.alumni.grade()}}</td>
+                  <td>{{kp.alumni.gender}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                  <th>University</th>
+                  <th>Program</th>
+                  <th>Knowledge</th>
+                  <th>Alumni</th>
+                  <th>Grade</th>
+                  <th>gender</th>
+                </tr>
+                </tfoot>
+              </table>
+            </div>
+        </div>
+
+        <button onclick="location.href='/kp/view'">Search again</button>
+        {% else %}
+            <form method = "post">
+              <label>University name</label><br>
+                <input type="text" id="searchInput" onkeyup="searchSuggestions(this.value) " name="universityName" required>
+                <ul id="universitysuggestionsList" class="suggestions-list"></ul>
+                <br><label>program name</label><br>
+                 <input type="text" id="searchInput2" onkeyup="searchSuggestions2(this.value, searchInput.value) " name="programName" required>
+                <ul id="programsuggestionsList" class="suggestions-list"></ul>
+                <br>
+                <input type="submit" >
+            </form>
+        {% endif %}
+        <button onclick="location.href='/uicer'">Back to Home</button>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2023 <a>Apricot Group</a>.</strong>
+  </footer>
+
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<!-- jQuery 3 -->
+<script src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js')}}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{{ url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{ url_for('static', filename='dist/js/adminlte.min.js')}}"></script>
+<script src="{{ url_for('static', filename='dist/js/edu-modal-alert-confirm.js')}}"></script>
+
+<!-- DataTables -->
+<script src="{{ url_for('static', filename='bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{ url_for('static', filename='bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+<!-- SlimScroll -->
+<script src="{{ url_for('static', filename='bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
+<!-- FastClick -->
+<script src="{{ url_for('static', filename='bower_components/fastclick/lib/fastclick.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{ url_for('static', filename='dist/js/adminlte.min.js')}}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{ url_for('static', filename='dist/js/demo.js')}}"></script>
+<script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+</script>
+</body>
+</html>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

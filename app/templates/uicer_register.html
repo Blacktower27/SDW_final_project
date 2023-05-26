@@ -1,0 +1,138 @@
+
+<html lang="en">
+<head>
+    {% if flag=="fail" %}
+        <script>
+            window.alert("{{message}}");
+        </script>
+    {% endif%}
+</head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPS Registration</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback')}}">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='user/plugins/fontawesome-free/css/all.min.css')}}">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='user/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='user/dist/css/adminlte.min.css')}}">
+</head>
+<body class="hold-transition register-page">
+<div class="register-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a  class="h1"><b>GPS</b>system</a>
+    </div>
+    <div class="card-body">
+      <p class="login-box-msg">Register a new account</p>
+
+      <form id="uicer_form" method = "post">
+        <div class="input-group mb-3">
+          <input type="text" name="name" class="form-control" placeholder="Name" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <input type="text" name="email" class="form-control" placeholder="UIC Email" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <input type="password" name="c_password" class="form-control" placeholder="Confirm password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <select id="gender" name="gender" class="form-control" placeholder="Gender" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="helicopter">Other</option>
+          </select>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <input type="number" name="gpa" class="form-control" placeholder="GPA" step="0.01" name="gpa" min="0" max="4" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+
+        <div id="alumni-container">
+        </div>
+
+        <div class="row">
+          <div class="col-8">
+              <input type="checkbox" id="checkBox1" onclick="addinformation()">  Alumni </input><br><br>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+      <a href="/uicer/login" class="text-center">I already have a account</a>
+    </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+<!-- jQuery -->
+<script src="{{ url_for('static', filename='user/plugins/jquery/jquery.min.js')}}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ url_for('static', filename='user/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{ url_for('static', filename='user/dist/js/adminlte.min.js')}}"></script>
+
+<script>
+    function addinformation() {
+        var form = document.getElementById('uicer_form');
+        var container = document.getElementById('alumni-container');
+        var newEmail = document.createElement('div');
+        if(checkBox1.checked==true){
+            newEmail.innerHTML = '<label>status:</label><input class="form-control" type="text" name="status" required><br><input type="checkbox" name="anonymousName" value="true">  Anonymous</input>';
+            container.appendChild(newEmail);
+            form.action='/alumni/register';
+        }else{
+            container.innerHTML = '';
+            form.action='/uicer/register';
+        }
+    }
+
+</script>
+</body>
+</html>

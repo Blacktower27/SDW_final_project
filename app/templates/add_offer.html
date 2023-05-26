@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% block login %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Graduation_Placement_Service</title>
+  <!-- 支持响应式布局 -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
+  <!-- 象形字体 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/font-awesome/css/font-awesome.min.css')}}">
+  <!-- 图标 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/Ionicons/css/ionicons.min.css')}}">
+  <!-- 主题风格样式 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/AdminLTE.min.css')}}">
+  <!-- AdminLTE 皮肤.这里选择的是skin-blue样式，我们还可以有其他皮肤可以选择. -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/skins/skin-blue.min.css')}}">
+  <!-- 兼容IE9以下浏览器 -->
+  <!--[if lt IE 9]>
+  <script src="{{ url_for('static', filename='local/js/html5shiv.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='local/js/respond.min.js')}}"></script>
+  <![endif]-->
+  <!-- Google Font -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='local/css/google_fonts.css')}}">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <!-- Main Header 主体页头 -->
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a class="logo">
+      <!-- 侧栏迷你徽标 mini 50x50 pixels -->
+      <span class="logo-mini"><b>GPS</b></span>
+      <!-- 常规状态标志和移动设备标志 -->
+      <span><b>GPS System</b></span>
+    </a>
+
+    <!-- Header Navbar 首部导航栏 -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button 侧边栏切换按钮 -->
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <span class="sr-only">Switch Navigator</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- 左侧柱。包含徽标和边栏 -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">Navigator</li>
+        <!-- 导航列表，你可以自行更改图标 -->
+        <li><a href="/uicer"><i class="fa fa-home"></i> <span>Mainpage</span></a></li>
+
+        <li><a href="/kp/view"><i class="fa fa-sitemap"></i> <span>View Knowledge Point</span></a></li>
+        <li class="treeview">
+          <a><i class="fa fa-users"></i> <span>Search Program</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href='/program/searchByGPA'> <i class="fa fa-circle-o"></i>Search By GPA</a></li>
+            <li><a href='/university/searchByUniversity'> <i class="fa fa-circle-o"></i>Search By University</a></li>
+          </ul>
+        </li>
+        <li><a href="/offer/view"><i class="fa fa-user"></i> <span>View Offer Time</span></a></li>
+        <li><a href="/uicer/change_password"><i class="fa fa-key"></i> <span>Change Password</span></a></li>
+        <li><a href="/uicer/beAlumni"><i class="fa fa-id-card-o"></i> <span>Update Account</span></a></li>
+        <li class="treeview">
+          <a><i class="fa fa-gear"></i> <span>Add New</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/offer/add" class="active"> <i class="fa fa-circle-o"></i>Add Offer</a></li>
+            {% if alumni%}
+            <li><a href='/kp/add'> <i class="fa fa-circle-o"></i>Add Knowledge Point</a></li>
+            {% endif %}
+            <li><a href='/university/add'> <i class="fa fa-circle-o"></i>Add University</a></li>
+            <li><a href='/program/add'> <i class="fa fa-circle-o"></i>Add Program</a></li>
+          </ul>
+        </li>
+          <li><a href="/gpt/advice"><i class="fa fa-sitemap"></i> <span>Program guidance</span></a></li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Add Offer
+        <small></small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+        <form method="POST" id="offer_form" enctype="multipart/form-data">
+            <label for="date">date</label>
+            <input type="date" name="date" id="date" required />
+
+            <label for="GPA">GPA</label>
+            <input type="number" step="0.01" id="gpa" min="0" max="4" name="gpa" required /><br>
+            <label for="photoCopy">photoCopy</label>
+            <input type="file" accept="image/*" name="photoCopy" id="photoCopy" onchange="imagePreview()" /><br>
+            <img id="previewImage" src="#" alt="Preview Image" style="max-width:200px; max-height:200px; display:none">
+            <br>
+            <div id="information">
+
+            </div>
+            <select id="select" onchange="addinformation()" required>
+                <option value="" selected></option>
+                <option value="option1">Company offer</option>
+                <option value="option2">Taught course offer</option>
+                <option value="option3">Research offer</option>
+            </select><br>
+            <input type="submit" value="Upload">
+        </form>
+        <button onclick="location.href='/uicer'">Back To Home</button>
+        <script>
+            function addinformation() {
+                var container = document.getElementById('information');
+                var select = document.getElementById("select");
+                var form = document.getElementById('offer_form');
+                var newinfo = document.createElement('div');
+                container.innerHTML = '';
+                if(select.value == "option1"){
+                    newinfo.innerHTML = '<label>title:</label><input type="text" name="title"><label>company name:</label><input type="text" name="companyName"><br><label>Employment experience:</label><br><textarea rows="5" cols="50" name="employmentExperience"></textarea><br>';
+                    container.appendChild(newinfo);
+                    form.action='/offer_com/add';
+                }else if(select.value == "option2"){
+                    newinfo.innerHTML = '<label>Program name</label><br><input type="test" name="programName" required><br><label>University name</label><br><input type="test" name="universityName" required><br>';
+                    container.appendChild(newinfo);
+                    form.action='/offer_tac/add';
+                }else{
+                    newinfo.innerHTML = '<label>Program name</label><br><input type="test" name="programName" required><br><label>University name</label><br><input type="test" name="universityName" required><br><label>Supervisor</label><br><input type="test" name="Supervisor" required><br><label>Name</label><br><input type="test" name="name" required><br><label>Research Topic</label><br><input type="test" name="reseachtopic" required><br><label>No.Paper</label><input type="number" step="0" id="Nopaper" name="Nopaper" min="0" required /><br><label>No.Research</label><input type="number" step="0" id="Noreach" name="Noreach" min="0" required /><br>';
+                    container.appendChild(newinfo);
+                    form.action='/offer_res/add';
+                }
+            }
+            function imagePreview() {
+                var preview = document.getElementById("previewImage");
+                var file    = document.getElementById("photoCopy").files[0];
+                var reader  = new FileReader();
+
+                reader.onloadend = function () {
+                    preview.src = reader.result;
+                    preview.style.display = "block";
+                }
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "";
+                    preview.style.display = "none";
+                }
+                return true
+            }
+        </script>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2023 <a>Apricot Group</a>.</strong>
+  </footer>
+
+  <!-- 添加侧栏的背景。必须放置此处紧接在控制侧边栏之后 -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<!-- jQuery 3 -->
+<script src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js')}}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{{ url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{ url_for('static', filename='dist/js/adminlte.min.js')}}"></script>
+
+<script src="{{ url_for('static', filename='dist/js/edu-modal-alert-confirm.js')}}"></script>
+
+<script>
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('date').setAttribute('max', today);
+</script>
+</body>
+</html>
+
+{% endblock %}

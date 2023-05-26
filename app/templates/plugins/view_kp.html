@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+<p>View knowledge point</p>
+{% block login %}
+<head>
+</head>
+<p>search knowledge point</p>
+{% if kps %}
+    <table>
+        <thead>
+            <tr>
+                <th>Program name</th>
+                <th>University name</th>
+                <th>course name list</th>
+                <th>alumni name</th>
+                <th>grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for kp in kps %}
+                <tr>
+                    <td>{{kp.program.programName}}</td>
+                    <td>{{kp.program.university.universityName}}</td>
+                    <td>{{kp.courseNameList}}</td>
+                    <td>{{kp.alumni.name}}</td>
+                    <td>{{kp.alumni.grade()}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button onclick="location.href='/kp/view'">search again</button>
+{% else %}
+    <form method = "post">
+        <label>Program name</label><br>
+        <input type="test" name="programName" required><br>
+        <label>University name</label><br>
+        <input type="test" name="universityName" required><br>
+        <input type="submit" >
+    </form>
+{% endif %}
+<button onclick="location.href='/uicer'">back to index</button>
+{% endblock %}
